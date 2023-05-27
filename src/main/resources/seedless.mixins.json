@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "xyz.tildejustin.seedless.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "GameGuiMixin"
+  ],
+  "client": [],
+  "injectors": {
+    "defaultRequire": 1
+	}
+}

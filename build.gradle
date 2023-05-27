@@ -1,12 +1,18 @@
 plugins {
-	id 'maven-publish'
 	alias libs.plugins.quilt.loom
 	alias libs.plugins.ploceus
 }
 
 archivesBaseName = project.archives_base_name
-version = "${project.version}+${libs.versions.minecraft.get()}"
+//version = "${project.version}+${libs.versions.minecraft.get()}"
+version = "${project.version}+1.0-1.2.5"
 group = project.maven_group
+
+loom {
+	clientOnlyMinecraftJar()
+	setIntermediaryUrl("https://maven.ornithemc.net/releases/net/ornithemc/calamus-intermediary/1.0.0-client/calamus-intermediary-1.0.0-client-v2.jar")
+//	setIntermediaryUrl("https://maven.ornithemc.net/releases/net/ornithemc/calamus-intermediary/1.2.5-client/calamus-intermediary-1.2.5-client-v2.jar")
+}
 
 repositories {
 	// Add repositories to retrieve artifacts from in here.
@@ -60,22 +66,5 @@ java {
 jar {
 	from('LICENSE') {
 		rename { "${it}_${archivesBaseName}" }
-	}
-}
-
-// Configure the maven publication
-publishing {
-	publications {
-		mavenJava(MavenPublication) {
-			from components.java
-		}
-	}
-
-	// See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
-	repositories {
-		// Add repositories to publish to here.
-		// Notice: This block does NOT have the same function as the block in the top level.
-		// The repositories here will be used for publishing your artifact, not for
-		// retrieving dependencies.
 	}
 }
