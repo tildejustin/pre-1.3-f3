@@ -1,5 +1,5 @@
 plugins {
-	alias libs.plugins.quilt.loom
+	id 'fabric-loom' version '1.2-SNAPSHOT'
 	alias libs.plugins.ploceus
 }
 
@@ -11,7 +11,6 @@ group = project.maven_group
 loom {
 	clientOnlyMinecraftJar()
 	setIntermediaryUrl("https://maven.ornithemc.net/releases/net/ornithemc/calamus-intermediary/1.0.0-client/calamus-intermediary-1.0.0-client-v2.jar")
-//	setIntermediaryUrl("https://maven.ornithemc.net/releases/net/ornithemc/calamus-intermediary/1.2.5-client/calamus-intermediary-1.2.5-client-v2.jar")
 }
 
 repositories {
@@ -20,27 +19,23 @@ repositories {
 	// Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
 	// See https://docs.gradle.org/current/userguide/declaring_repositories.html
 	// for more information about repositories.
+	maven {
+		name = 'Ornithe'
+		url = 'https://maven.ornithemc.net/releases'
+	}
 }
 
 // All the dependencies are declared at gradle/libs.version.toml and referenced with "libs.<id>"
 // See https://docs.gradle.org/current/userguide/platforms.html for information on how version catalogs work.
 dependencies {
-	minecraft libs.minecraft
+	minecraft "com.mojang:minecraft:1.0"
+//	mappings "net.ornithemc:feather:1.0.0-client+build.1:v2"
 	mappings loom.layered {
-		mappings variantOf(libs.feather.mappings) { classifier 'v2' }
+		mappings "net.ornithemc:feather:1.0.0-client+build.1:v2"
 		ploceus.nestedMappings(it) // remove this line if not using nests
 	}
-	nests libs.nests // remove this line if not using nests
-
-	modImplementation libs.quilt.loader
-}
-
-processResources {
-	inputs.property 'version', version
-
-	filesMatching('quilt.mod.json') {
-		expand "version": version
-	}
+	nests "net.ornithemc:nests:1.0.0-client+build.1" // remove this line if not using nests
+	modImplementation "net.fabricmc:fabric-loader:0.14.21"
 }
 
 tasks.withType(JavaCompile).configureEach {

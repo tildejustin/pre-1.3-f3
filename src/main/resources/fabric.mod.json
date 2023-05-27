@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "id": "seedless",
+  "version": "1.0.0",
+  "name": "Seedless",
+  "description": "removes the seed from the debug screen",
+  "authors": [
+    "tildejustin"
+  ],
+  "license": "MIT",
+  "environment": "*",
+  "entrypoints": {
+    "main": []
+  },
+  "mixins": [
+    "seedless.mixins.json"
+  ]
+}
