@@ -1,20 +1,17 @@
 [versions]
-# The latest versions are available at https://lambdaurora.dev/tools/import_quilt.html
 minecraft = "1.0.0"
-quilt_loader = "0.18.10"
-feather_mappings = "1.0.0-client+build.1"
-nests = "1.0.0-client+build.1"
-#minecraft = "1.2.5"
-#quilt_loader = "0.18.10"
-#feather_mappings = "1.2.5-client+build.1"
-#nests = "1.2.5-client+build.1"
+feather_build = "22"
+nests_build = "7"
+fabric_loader = "0.15.11"
+loom = "1.6-SNAPSHOT"
+ploceus = "1.6-SNAPSHOT"
+vineflower = "1.10.1"
 
 [libraries]
 minecraft = { module = "com.mojang:minecraft", version.ref = "minecraft" }
-quilt_loader = { module = "org.quiltmc:quilt-loader", version.ref = "quilt_loader" }
-feather_mappings = { module = "net.ornithemc:feather", version.ref = "feather_mappings" }
-nests = { module = "net.ornithemc:nests", version.ref = "nests" }
+fabric_loader = { module = "net.fabricmc:fabric-loader", version.ref = "fabric_loader" }
+vineflower = { module = "org.vineflower:vineflower", version.ref = "vineflower" }
 
 [plugins]
-quilt_loom = { id = "org.quiltmc.loom", version = "1.1.+" }
-ploceus = { id = "ploceus", version = "1.1.+" }
+fabric_loom = { id = "fabric-loom", version.ref = "loom" }
+ploceus = { id = "ploceus", version.ref = "ploceus" }

@@ -1,18 +1,23 @@
 {
   "schemaVersion": 1,
   "id": "seedless",
-  "version": "1.0.1",
+  "version": "${version}",
   "name": "Seedless",
-  "description": "removes the seed from the debug screen",
+  "description": "Removes the seed from the debug screen",
   "authors": [
-    "tildejustin"
+    {
+      "name": "tildejustin",
+      "contact": {
+        "homepage": "https://github.com/tildejustin"
+      }
+    }
   ],
   "license": "MIT",
-  "environment": "*",
-  "entrypoints": {
-    "main": []
-  },
+  "environment": "client",
   "mixins": [
     "seedless.mixins.json"
-  ]
+  ],
+  "depends": {
+    "minecraft": ">1.0.0-beta.7.3 <1.3-alpha.12.21.a"
+  }
 }

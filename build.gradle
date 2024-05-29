@@ -1,65 +1,71 @@
 plugins {
-	id 'fabric-loom' version '1.3-SNAPSHOT'
+	alias libs.plugins.fabric.loom
 	alias libs.plugins.ploceus
+	id "maven-publish"
 }
 
-archivesBaseName = project.archives_base_name
-//version = "${project.version}+${libs.versions.minecraft.get()}"
-version = "${project.version}+1.0-1.2.5"
-group = project.maven_group
+version = mod_version
+group = maven_group
+
+base {
+	archivesName = archives_name
+}
 
 loom {
+	decompilers {
+		vineflower {
+			options.putAll(["mark-corresponding-synthetics": "1", "indent-string": "    "])
+		}
+	}
+	mixin {
+		useLegacyMixinAp = false
+	}
 	clientOnlyMinecraftJar()
-	setIntermediaryUrl("https://maven.ornithemc.net/releases/net/ornithemc/calamus-intermediary/1.0.0-client/calamus-intermediary-1.0.0-client-v2.jar")
 }
 
-repositories {
-	// Add repositories to retrieve artifacts from in here.
-	// You should only use this when depending on other mods because
-	// Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
-	// See https://docs.gradle.org/current/userguide/declaring_repositories.html
-	// for more information about repositories.
-	maven {
-		name = 'Ornithe'
-		url = 'https://maven.ornithemc.net/releases'
+afterEvaluate {
+	tasks.named("genSourcesWithVineflower").configure {
+		useCache = false
 	}
 }
 
-// All the dependencies are declared at gradle/libs.version.toml and referenced with "libs.<id>"
-// See https://docs.gradle.org/current/userguide/platforms.html for information on how version catalogs work.
+ploceus {
+	clientOnlyMappings()
+}
+
 dependencies {
-	minecraft "com.mojang:minecraft:1.0.0"
-//	mappings "net.ornithemc:feather:1.0.0-client+build.1:v2"
-	mappings loom.layered {
-		mappings "net.ornithemc:feather:1.0.0-client+build.1:v2"
-		ploceus.nestedMappings(it) // remove this line if not using nests
+	minecraft libs.minecraft
+	mappings ploceus.featherMappings(libs.versions.feather.build.get())
+	// nests ploceus.nests(libs.versions.nests.build.get())
+	modImplementation libs.fabric.loader
+	vineflowerDecompilerClasspath libs.vineflower
+}
+
+processResources {
+	filesMatching "fabric.mod.json", {
+		expand "version": version
 	}
-	nests "net.ornithemc:nests:1.0.0-client+build.1" // remove this line if not using nests
-	modImplementation "net.fabricmc:fabric-loader:0.14.22"
 }
 
 tasks.withType(JavaCompile).configureEach {
-	it.options.encoding = 'UTF-8'
-	it.options.release = 8
+	it.options.encoding = "UTF-8"
+	if (JavaVersion.current().isJava9Compatible()) {
+		it.options.release.set(8)
+	}
 }
 
 java {
-	// Still required by IDEs such as Eclipse and Visual Studio Code
-	sourceCompatibility = JavaVersion.VERSION_1_8
-	targetCompatibility = JavaVersion.VERSION_1_8
-
-	// Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task if it is present.
-	// If you remove this line, sources will not be generated.
+	sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
 	withSourcesJar()
-
-	// If this mod is going to be a library, then it should also generate Javadocs in order to aid with development.
-	// Uncomment this line to generate them.
-	// withJavadocJar()
 }
 
-// If you plan to use a different file for the license, don't forget to change the file name here!
 jar {
-	from('LICENSE') {
-		rename { "${it}_${archivesBaseName}" }
+	from "LICENSE"
+}
+
+publishing {
+	publications.create("mavenJava", MavenPublication) {
+		from components.java
 	}
+	repositories {}
 }
